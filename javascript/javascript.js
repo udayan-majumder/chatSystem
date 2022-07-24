@@ -60,6 +60,7 @@ onAuthStateChanged(auth,(user)=>{
     })
     listOfUser(user)
     console.log(userList.indexOf("1mL3pbBbLJfqgOc7vPkXgQuNFSn"))
+    console.log(user.uid)
     }
     else{
      loginbtn.addEventListener("click", () => {
