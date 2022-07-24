@@ -46,8 +46,6 @@ function setdata(user){
 }
 function listOfUser(user){
  userList.push(user.uid)
-  userList.forEach(ok => console.log(ok))
-  console.log(user.uid)
 }
 
 onAuthStateChanged(auth,(user)=>{
@@ -61,7 +59,7 @@ onAuthStateChanged(auth,(user)=>{
          userinterface.classList.add("blank");
     })
     listOfUser(user)
-    
+    console.log(userList)
     }
     else{
      loginbtn.addEventListener("click", () => {
