@@ -46,7 +46,7 @@ function setdata(user){
 }
 function listOfUser(user){
  userList.push(user.uid)
-  console.log(userList);
+  userList.forEach(ok => console.log(ok))
   console.log(user.uid)
 }
 
