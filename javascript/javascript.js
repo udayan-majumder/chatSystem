@@ -47,6 +47,7 @@ function listOfUser(user){
  const userList = []
  userList.push(user.uid)
   console.log(userList);
+  console.log(user.uid)
 }
 
 onAuthStateChanged(auth,(user)=>{
