@@ -46,7 +46,7 @@ function setdata(user){
 function listOfUser(user){
  const userList = []
  userList.push(user.uid)
-  console.log(user.uid);
+  console.log(userList);
 }
 
 onAuthStateChanged(auth,(user)=>{
