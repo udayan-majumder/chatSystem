@@ -19,6 +19,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app)
+ const userList = [];
 const loginbtn = document.getElementById("login-btn");
 const logindiv = document.getElementById("login-div");
 const logoutbtn = document.getElementById("logout-btn")
@@ -44,7 +45,6 @@ function setdata(user){
   userprofilepicture.src = user.photoURL;
 }
 function listOfUser(user){
- const userList = []
  userList.push(user.uid)
   console.log(userList);
   console.log(user.uid)
