@@ -59,7 +59,7 @@ onAuthStateChanged(auth,(user)=>{
          userinterface.classList.add("blank");
     })
     listOfUser(user)
-    console.log(userList["1mL3pbBbLJfqgOc7vPkXgQuNFSn"])
+    console.log(userList.indexOf("1mL3pbBbLJfqgOc7vPkXgQuNFSn"))
     }
     else{
      loginbtn.addEventListener("click", () => {
