@@ -35,6 +35,7 @@ const userinterface = document.getElementById("user-interface");
 const userprofilepicture = document.getElementById("user-profile-picture");
 const mainbodyleft = document.getElementById("main-body-left");
 const sideprofile = document.getElementById("side-profiles")
+const profiles = document.getElementById("profiles")
 
 const db= getFirestore();
 const messagedb=collection(db,"Messages");
@@ -65,21 +66,6 @@ function setdata(user){
 //  userList.push(user.uid)
 // }
 function sideProfileDesign(data){
- const link = document.createElement("a")
- link.href="#"
- link.classList.add("button-inner")
- const sidelayout = document.createElement("button")
- sidelayout.classList.add("side-profiles")
- sidelayout.value = data.uid;
- const sidelayoutimage = document.createElement("img")
- sidelayoutimage.classList.add("side-profiles-img")
- sidelayoutimage.src = data.profilepic
- const sidelayouttext = document.createElement("div")
- sidelayouttext.classList.add("side-profiles-text")
- sidelayouttext.textContent = data.username;
- link.append(sidelayoutimage,sidelayouttext)
- sidelayout.appendChild(link)
- mainbodyleft.appendChild(sidelayout)
 
 }
 
@@ -95,15 +81,35 @@ onAuthStateChanged(auth,(user)=>{
         username: user.displayName,
       });
     const newprofile = await getDocs(userdb)
+    const container = [];
     newprofile.forEach((newdata)=>{
+      
       const updatedata = newdata.data()
       if(updatedata.uid==user.uid){
         return
       }
       else{
-      sideProfileDesign(updatedata);
-      }
+      const link = document.createElement("a");
+      link.href = "#";
+      link.classList.add("button-inner");
+      const sidelayout = document.createElement("button");
+      sidelayout.classList.add("side-profiles");
+      sidelayout.value = updatedata.uid;
+      const sidelayoutimage = document.createElement("img");
+      sidelayoutimage.classList.add("side-profiles-img");
+      sidelayoutimage.src = updatedata.profilepic;
+      const sidelayouttext = document.createElement("div");
+      sidelayouttext.classList.add("side-profiles-text");
+      sidelayouttext.textContent = updatedata.username;
+      link.append(sidelayoutimage, sidelayouttext);
+      sidelayout.appendChild(link);
+      container.push(sidelayout)
+      // mainbodyleft.appendChild(sidelayout);
+    
+
       
+      }
+      profiles.replaceChildren(...container)
         })
     };
     userinfo()
