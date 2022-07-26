@@ -123,6 +123,9 @@ border-radius:30px ;
     height:350px;
     width:50%;
    border:1px solid rgba(255,255,255,0.1);
+   display: flex;
+   flex-direction: column;
+
 
 }
 .main-body-right{
@@ -162,4 +165,31 @@ border-radius:30px ;
    border: none;
    background-color: #00acee;
    fill:white;
+}
+.side-profiles{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    outline: none;
+    border: none;
+    /* border-bottom: 1px solid rgba(255,255,255,0.1) ; */
+    background-color: #28282b;
+    padding: 5px;
+    
+}
+.side-profiles-img{
+    height:35px;
+    width:35px;
+    border-radius: 40px;
+    
+}
+.side-profiles-text{
+    /* height: 100%; */
+   width:185px;
+   display: flex;
+   justify-content: left;
+   border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 10px 10px;
+    font-family: "Poppins";
+    color: #fff;
 }
