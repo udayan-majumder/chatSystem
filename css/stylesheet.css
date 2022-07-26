@@ -13,6 +13,8 @@ body{
     justify-content: center;
     
 }
+
+
 .blank{
     display: none;
 }
@@ -168,13 +170,10 @@ border-radius:30px ;
 }
 .side-profiles{
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    outline: none;
+    justify-content: center;
     border: none;
-    /* border-bottom: 1px solid rgba(255,255,255,0.1) ; */
     background-color: #28282b;
-    padding: 5px;
+    padding: 5px 0px;
     
 }
 .side-profiles-img{
@@ -182,6 +181,11 @@ border-radius:30px ;
     width:35px;
     border-radius: 40px;
     
+}
+.button-inner{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 .side-profiles-text{
     /* height: 100%; */

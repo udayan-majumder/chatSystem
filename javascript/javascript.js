@@ -65,6 +65,9 @@ function setdata(user){
 //  userList.push(user.uid)
 // }
 function sideProfileDesign(data){
+ const link = document.createElement("a")
+ link.href="#"
+ link.classList.add("button-inner")
  const sidelayout = document.createElement("button")
  sidelayout.classList.add("side-profiles")
  sidelayout.value = data.uid;
@@ -74,7 +77,8 @@ function sideProfileDesign(data){
  const sidelayouttext = document.createElement("div")
  sidelayouttext.classList.add("side-profiles-text")
  sidelayouttext.textContent = data.username;
- sidelayout.append(sidelayoutimage,sidelayouttext)
+ link.append(sidelayoutimage,sidelayouttext)
+ sidelayout.appendChild(link)
  mainbodyleft.appendChild(sidelayout)
 
 }
@@ -93,7 +97,13 @@ onAuthStateChanged(auth,(user)=>{
     const newprofile = await getDocs(userdb)
     newprofile.forEach((newdata)=>{
       const updatedata = newdata.data()
-      sideProfileDesign(updatedata)
+      if(updatedata.uid==user.uid){
+        return
+      }
+      else{
+      sideProfileDesign(updatedata);
+      }
+      
         })
     };
     userinfo()
