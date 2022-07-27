@@ -142,11 +142,14 @@ onAuthStateChanged(auth, (user) => {
           container.push(sidelayout);
 
           sidelayout.addEventListener("click", async () => {
-            getDoc(query(doc(db, "userDetails", sidelayout.value)),orderBy("time")).then((doc) => {
+            getDoc(
+              query(doc(db, "userDetails", sidelayout.value)),
+              orderBy("time","desc")
+            ).then((doc) => {
               const details = doc.data();
               maincotainer.classList.remove("main-container-adjust");
               mainbodyright.classList.remove("blank");
-              mainbodyright.classList.add("main-body-right")
+              mainbodyright.classList.add("main-body-right");
               currentclickeduser.src = details.profilepic;
               currentclickedtext.textContent = details.username;
               selecteduser = sidelayout.value;
