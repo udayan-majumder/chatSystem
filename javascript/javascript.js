@@ -93,13 +93,13 @@ function loadMessage(data) {
     if(nndata.senderuid==auth.currentUser.uid){
       messageinsideinsidediv.style.justifyContent = "right"
        messageinsideinsidediv.append(messagediv, messageprofile);
-       messageinsidediv.append(messageinsideinsidediv);
     }
     else{
       messageinsideinsidediv.style.justifyContent = "left"
        messageinsideinsidediv.append(messageprofile,messagediv);
-       messageinsidediv.append(messageinsideinsidediv);
+       
     }
+    messageinsidediv.append(messageinsideinsidediv);
     msglist.push(messageinsidediv);
   });
   messagecontainer.replaceChildren(...msglist);
@@ -142,9 +142,7 @@ onAuthStateChanged(auth, (user) => {
           container.push(sidelayout);
 
           sidelayout.addEventListener("click", async () => {
-            getDoc(
-              query(doc(db, "userDetails", sidelayout.value)),
-              orderBy("time","asc")
+            getDoc(doc(db, "userDetails", sidelayout.value),
             ).then((doc) => {
               const details = doc.data();
               maincotainer.classList.remove("main-container-adjust");
@@ -158,7 +156,7 @@ onAuthStateChanged(auth, (user) => {
               });
               sidelayout.classList.add("active");
             });
-            getDocs(messagedb).then((datas) => {
+            getDocs(query(messagedb,orderBy("time"))).then((datas) => {
               loadMessage(datas.docs.map((msg) => msg.data()));
             });
           });
