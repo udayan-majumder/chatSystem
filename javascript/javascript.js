@@ -144,7 +144,7 @@ onAuthStateChanged(auth, (user) => {
           sidelayout.addEventListener("click", async () => {
             getDoc(
               query(doc(db, "userDetails", sidelayout.value)),
-              orderBy("time","desc")
+              orderBy("time","asc")
             ).then((doc) => {
               const details = doc.data();
               maincotainer.classList.remove("main-container-adjust");
