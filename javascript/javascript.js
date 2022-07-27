@@ -142,7 +142,7 @@ onAuthStateChanged(auth, (user) => {
           container.push(sidelayout);
 
           sidelayout.addEventListener("click", async () => {
-            getDoc(doc(db, "userDetails", sidelayout.value)).then((doc) => {
+            getDoc(query(doc(db, "userDetails", sidelayout.value)),orderBy("time")).then((doc) => {
               const details = doc.data();
               maincotainer.classList.remove("main-container-adjust");
               mainbodyright.classList.remove("blank");
