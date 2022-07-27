@@ -102,7 +102,10 @@ function loadMessage(data) {
     messageinsidediv.append(messageinsideinsidediv);
     msglist.push(messageinsidediv);
   });
+  const scrolldiv = document.createElement("div")
+  msglist.push(scrolldiv)
   messagecontainer.replaceChildren(...msglist);
+  scrolldiv.scrollIntoView();
 }
 
 onAuthStateChanged(auth, (user) => {
