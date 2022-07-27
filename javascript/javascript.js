@@ -43,8 +43,10 @@ const profiles = document.getElementById("profiles");
 const currentclickeduser = document.getElementById("current-clicked-user");
 const currentclickedtext = document.getElementById("current-clicked-text");
 const userinput = document.getElementById("user-input");
-const maincotainer = document.getElementById("main-container")
-const mainbodyright = document.getElementById("main-body-right")
+const maincotainer = document.getElementById("main-container");
+const mainbodyright = document.getElementById("main-body-right");
+const messagecontainer = document.getElementById("message-container");
+// const msgidiv = document.getElementsByClassName("message-inside-div")
 const db = getFirestore();
 const messagedb = collection(db, "Messages");
 const userdb = collection(db, "userDetails");
@@ -65,28 +67,39 @@ function setdata(user) {
   userprofilepicture.src = user.photoURL;
 }
 
-async function sendMessage(seconduser, message, realuser) {
-  const sndmsg = await addDoc(messagedb, {
-    reciveruid: seconduser,
-    message: message.value,
-    time: serverTimestamp(),
-    senderuid: realuser.uid,
+function loadMessage(data) {
+  const msglist = [];
+  const filterdata = data.filter((ndata) => {
+    return (
+      (ndata.senderuid === auth.currentUser.uid &&
+        ndata.reciveruid === selecteduser) ||
+      (ndata.senderuid === selecteduser &&
+        ndata.reciveruid === auth.currentUser.uid)
+    );
   });
-}
-
-function loadMessage(data){
-
- const filterdata = data.filter((ndata)=>{
-    return ndata.reciveruid===selecteduser
-  })
- filterdata.forEach((nndata)=>{
-  if(nndata.reciveruid!=selecteduser){
-    return
-  }
-  else{
-    console.log(nndata.message)
-  }
- })
+  console.log(filterdata);
+  filterdata.forEach((nndata) => {
+    const messageinsidediv = document.createElement("div");
+    messageinsidediv.classList.add("message-div-inside");
+    const messageinsideinsidediv = document.createElement("div");
+    messageinsideinsidediv.classList.add("message-inside-inside-div");
+    const messagediv = document.createElement("div");
+    messagediv.classList.add("message");
+    messagediv.textContent = nndata.message;
+    const messageprofile = document.createElement("img");
+    messageprofile.classList.add("message-profile");
+    messageprofile.src = nndata.photoprofile;
+    messageinsideinsidediv.append(messagediv, messageprofile);
+    messageinsidediv.append(messageinsideinsidediv);
+    if(nndata.senderuid==auth.currentUser.uid){
+      messageinsideinsidediv.style.justifyContent = "right"
+    }
+    else{
+      messageinsideinsidediv.style.justifyContent = "left"
+    }
+    msglist.push(messageinsidediv);
+  });
+  messagecontainer.replaceChildren(...msglist);
 }
 
 onAuthStateChanged(auth, (user) => {
@@ -125,38 +138,44 @@ onAuthStateChanged(auth, (user) => {
           sidelayout.appendChild(link);
           container.push(sidelayout);
 
-          sidelayout.addEventListener("click", async() => {
+          sidelayout.addEventListener("click", async () => {
             getDoc(doc(db, "userDetails", sidelayout.value)).then((doc) => {
-               const details = doc.data();
-               maincotainer.classList.remove("main-container-adjust");
-               mainbodyright.classList.remove("blank");
-               currentclickeduser.src = details.profilepic;
-               currentclickedtext.textContent = details.username;
-               selecteduser = sidelayout.value;
-               document.querySelectorAll(".side-profiles").forEach((profile)=>{
-                profile.classList.remove("active")
-               })
-               sidelayout.classList.add("active")
-
+              const details = doc.data();
+              maincotainer.classList.remove("main-container-adjust");
+              mainbodyright.classList.remove("blank");
+              mainbodyright.classList.add("main-body-right")
+              currentclickeduser.src = details.profilepic;
+              currentclickedtext.textContent = details.username;
+              selecteduser = sidelayout.value;
+              document.querySelectorAll(".side-profiles").forEach((profile) => {
+                profile.classList.remove("active");
+              });
+              sidelayout.classList.add("active");
             });
-            getDocs(messagedb).then((datas)=>{
+            getDocs(messagedb).then((datas) => {
               loadMessage(datas.docs.map((msg) => msg.data()));
-            })
-            
+            });
           });
-          
-
         }
         profiles.replaceChildren(...container);
       });
     };
 
     userinfo();
-   userinput.addEventListener("keypress", (e) => {
-     if (e.key === "Enter") {
-       sendMessage(selecteduser, userinput, user);
-     }
-   });
+    userinput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        if (userinput.value.trim()) {
+          addDoc(messagedb, {
+            reciveruid: selecteduser,
+            message: userinput.value,
+            time: serverTimestamp(),
+            senderuid: user.uid,
+            photoprofile: user.photoURL,
+          });
+        }
+        userinput.value=""
+      }
+    });
     logoutbtn.addEventListener("click", () => {
       signout();
       logindiv.classList.add("login-div");

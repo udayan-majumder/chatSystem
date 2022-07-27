@@ -217,7 +217,6 @@ svg{
 .message-container{
     position: fixed;
     top:68px;
-    font-size: 100px;
     height:78%;
     width: 70%;
     background-color: #28282b;
@@ -242,4 +241,30 @@ svg{
 }
 .active{
     background-color: #696969;
+}
+.message-inside-div{
+    width: 70%;
+    display: flex;
+}
+.message-inside-inside-div{
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    padding: 10px 20px;
+    gap:10px;
+}
+.message{
+    background-color: #00acee;
+    font-family: "Poppins";
+    font-size: 18px;
+    border-radius: 8px;
+    padding: 7px 7px;
+    letter-spacing: 0.5px;
+    color: #fff;
+    
+}
+.message-profile{
+ height:45px;
+ width:45px;
+ border-radius: 30px;
 }
