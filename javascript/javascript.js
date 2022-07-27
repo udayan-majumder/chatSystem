@@ -141,8 +141,9 @@ onAuthStateChanged(auth, (user) => {
           sidelayout.appendChild(link);
           container.push(sidelayout);
 
-          sidelayout.addEventListener("click", async () => {
-            getDoc(doc(db, "userDetails", sidelayout.value),
+          sidelayout.addEventListener("click",() => {
+            selecteduser = sidelayout.value;
+            getDoc(doc(db, "userDetails", sidelayout.value)
             ).then((doc) => {
               const details = doc.data();
               maincotainer.classList.remove("main-container-adjust");
@@ -150,7 +151,7 @@ onAuthStateChanged(auth, (user) => {
               mainbodyright.classList.add("main-body-right");
               currentclickeduser.src = details.profilepic;
               currentclickedtext.textContent = details.username;
-              selecteduser = sidelayout.value;
+              
               document.querySelectorAll(".side-profiles").forEach((profile) => {
                 profile.classList.remove("active");
               });
