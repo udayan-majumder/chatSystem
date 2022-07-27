@@ -89,13 +89,16 @@ function loadMessage(data) {
     const messageprofile = document.createElement("img");
     messageprofile.classList.add("message-profile");
     messageprofile.src = nndata.photoprofile;
-    messageinsideinsidediv.append(messagediv, messageprofile);
-    messageinsidediv.append(messageinsideinsidediv);
+   
     if(nndata.senderuid==auth.currentUser.uid){
       messageinsideinsidediv.style.justifyContent = "right"
+       messageinsideinsidediv.append(messagediv, messageprofile);
+       messageinsidediv.append(messageinsideinsidediv);
     }
     else{
       messageinsideinsidediv.style.justifyContent = "left"
+       messageinsideinsidediv.append(messageprofile,messagediv);
+       messageinsidediv.append(messageinsideinsidediv);
     }
     msglist.push(messageinsidediv);
   });
