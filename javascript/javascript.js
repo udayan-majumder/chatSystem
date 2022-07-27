@@ -13,7 +13,11 @@ import {
   onSnapshot,
   getDocs,
   doc,
-  setDoc
+  setDoc,
+  getDoc,
+  query,
+  serverTimestamp,
+  orderBy,
 } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyA2E1phuV0Lu-Ee053u3n0enfNu-m65_w0",
@@ -26,116 +30,145 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app)
- const userList = [];
+const auth = getAuth(app);
+const userList = [];
 const loginbtn = document.getElementById("login-btn");
 const logindiv = document.getElementById("login-div");
-const logoutbtn = document.getElementById("logout-btn")
+const logoutbtn = document.getElementById("logout-btn");
 const userinterface = document.getElementById("user-interface");
 const userprofilepicture = document.getElementById("user-profile-picture");
 const mainbodyleft = document.getElementById("main-body-left");
-const sideprofile = document.getElementById("side-profiles")
-const profiles = document.getElementById("profiles")
+const sideprofile = document.getElementsByClassName("side-profiles");
+const profiles = document.getElementById("profiles");
+const currentclickeduser = document.getElementById("current-clicked-user");
+const currentclickedtext = document.getElementById("current-clicked-text");
+const userinput = document.getElementById("user-input");
+const maincotainer = document.getElementById("main-container")
+const mainbodyright = document.getElementById("main-body-right")
+const db = getFirestore();
+const messagedb = collection(db, "Messages");
+const userdb = collection(db, "userDetails");
+let selecteduser;
 
-const db= getFirestore();
-const messagedb=collection(db,"Messages");
-const userdb=collection(db,"userDetails");
-
-
-function signin(){
-    const popup=new GoogleAuthProvider(app);
-    signInWithPopup(auth,popup);
-  
-    
-
+function signin() {
+  const popup = new GoogleAuthProvider(app);
+  signInWithPopup(auth, popup);
 }
-function signout(){
-    signOut(auth);
+function signout() {
+  signOut(auth);
 }
-function setdata(user){
+function setdata(user) {
   logindiv.classList.add("blank");
   logindiv.classList.remove("login-div");
   userinterface.classList.remove("blank");
   userinterface.classList.add("user-interface");
   userprofilepicture.src = user.photoURL;
-
-    
-  
-}
-// function listOfUser(user){
-//  userList.push(user.uid)
-// }
-function sideProfileDesign(data){
-
 }
 
+async function sendMessage(seconduser, message, realuser) {
+  const sndmsg = await addDoc(messagedb, {
+    reciveruid: seconduser,
+    message: message.value,
+    time: serverTimestamp(),
+    senderuid: realuser.uid,
+  });
+}
 
+function loadMessage(data){
 
-onAuthStateChanged(auth,(user)=>{
-    if(user){
-    setdata(user)
+ const filterdata = data.filter((ndata)=>{
+    return ndata.reciveruid===selecteduser
+  })
+ filterdata.forEach((nndata)=>{
+  if(nndata.reciveruid!=selecteduser){
+    return
+  }
+  else{
+    console.log(nndata.message)
+  }
+ })
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    setdata(user);
+    onSnapshot(query(messagedb, orderBy("time")), (data) => {
+      loadMessage(data.docs.map((msg) => msg.data()));
+    });
     const userinfo = async () => {
       const newid = await setDoc(doc(db, "userDetails", auth.currentUser.uid), {
         uid: user.uid,
         profilepic: user.photoURL,
         username: user.displayName,
       });
-    const newprofile = await getDocs(userdb)
-    const container = [];
-    newprofile.forEach((newdata)=>{
-      
-      const updatedata = newdata.data()
-      if(updatedata.uid==user.uid){
-        return
-      }
-      else{
-      const link = document.createElement("a");
-      link.href = "#";
-      link.classList.add("button-inner");
-      const sidelayout = document.createElement("button");
-      sidelayout.classList.add("side-profiles");
-      sidelayout.value = updatedata.uid;
-      const sidelayoutimage = document.createElement("img");
-      sidelayoutimage.classList.add("side-profiles-img");
-      sidelayoutimage.src = updatedata.profilepic;
-      const sidelayouttext = document.createElement("div");
-      sidelayouttext.classList.add("side-profiles-text");
-      sidelayouttext.textContent = updatedata.username;
-      link.append(sidelayoutimage, sidelayouttext);
-      sidelayout.appendChild(link);
-      container.push(sidelayout)
-      // mainbodyleft.appendChild(sidelayout);
-    
+      const newprofile = await getDocs(userdb);
+      const container = [];
+      newprofile.forEach((newdata) => {
+        const updatedata = newdata.data();
+        if (updatedata.uid == user.uid) {
+          return;
+        } else {
+          const link = document.createElement("a");
+          link.href = "#";
+          link.classList.add("button-inner");
+          const sidelayout = document.createElement("button");
+          sidelayout.classList.add("side-profiles");
+          sidelayout.value = updatedata.uid;
 
-      
-      }
-      profiles.replaceChildren(...container)
-        })
+          const sidelayoutimage = document.createElement("img");
+          sidelayoutimage.classList.add("side-profiles-img");
+          sidelayoutimage.src = updatedata.profilepic;
+          const sidelayouttext = document.createElement("div");
+          sidelayouttext.classList.add("side-profiles-text");
+          sidelayouttext.textContent = updatedata.username;
+          link.append(sidelayoutimage, sidelayouttext);
+          sidelayout.appendChild(link);
+          container.push(sidelayout);
+
+          sidelayout.addEventListener("click", async() => {
+            getDoc(doc(db, "userDetails", sidelayout.value)).then((doc) => {
+               const details = doc.data();
+               maincotainer.classList.remove("main-container-adjust");
+               mainbodyright.classList.remove("blank");
+               currentclickeduser.src = details.profilepic;
+               currentclickedtext.textContent = details.username;
+               selecteduser = sidelayout.value;
+               document.querySelectorAll(".side-profiles").forEach((profile)=>{
+                profile.classList.remove("active")
+               })
+               sidelayout.classList.add("active")
+
+            });
+            getDocs(messagedb).then((datas)=>{
+              loadMessage(datas.docs.map((msg) => msg.data()));
+            })
+            
+          });
+          
+
+        }
+        profiles.replaceChildren(...container);
+      });
     };
-    userinfo()
-    
-  
-    logoutbtn.addEventListener('click',()=>{
-        signout();
-         logindiv.classList.add("login-div");
-         logindiv.classList.remove("blank");
-         userinterface.classList.remove("user-interface");
-         userinterface.classList.add("blank");
-    })
 
-    
-    }
-    else{
+    userinfo();
+   userinput.addEventListener("keypress", (e) => {
+     if (e.key === "Enter") {
+       sendMessage(selecteduser, userinput, user);
+     }
+   });
+    logoutbtn.addEventListener("click", () => {
+      signout();
+      logindiv.classList.add("login-div");
+      logindiv.classList.remove("blank");
+      userinterface.classList.remove("user-interface");
+      userinterface.classList.add("blank");
+    });
+  } else {
+    loginbtn.addEventListener("click", () => {
+      signin();
 
-     
-
-     loginbtn.addEventListener("click", () => {
-       signin();
-       
-       //  auth.currentUser.uid
-       
-     });
-    
-    }
-})
-
+      //  auth.currentUser.uid
+    });
+  }
+});

@@ -23,7 +23,7 @@
           <div class="login-text">welcome to UDchat</div>
         </div>
         <div class="blank" id="user-interface">
-          <div class="main-container">
+          <div class="main-container main-container-adjust" id="main-container">
             <div class="main-body-left" id="main-body-left">
               <div class="upper-navbar-left">
               <img
@@ -37,15 +37,26 @@
               </button>
               </div>
               <div class="profiles" id="profiles">
-
+                 
                  </div> 
             </div>
-            <div class="main-body-right" id="main-body-right">
-              <div class="upper-navbar-right"></div>
+            <div class="main-body-right blank" id="main-body-right">
+              <div class="upper-navbar-right">
+                <img src="" alt="" class="current-clicked-user" id="current-clicked-user">
+                <a href="#"><div  class="current-clicked-text" id="current-clicked-text"></div>
+                </a>
+              </div>
+              <div class="message-container">
+               
+
+                
+              
+              </div>
               <div class="message-input-area">
                 <input type="text" class="user-input" id="user-input" />
                 <button class="message-send-btn" id="message-send-btn">
-                  <svg
+                  <a href="#" class="messae-send-btn-inner">  
+                    <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
@@ -54,6 +65,8 @@
                       d="m21.426 11.095-17-8A1 1 0 0 0 3.03 4.242l1.212 4.849L12 12l-7.758 2.909-1.212 4.849a.998.998 0 0 0 1.396 1.147l17-8a1 1 0 0 0 0-1.81z"
                     ></path>
                   </svg>
+                </a>
+                
                 </button>
               </div>
             </div>
