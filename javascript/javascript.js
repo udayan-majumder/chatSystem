@@ -46,13 +46,16 @@ const userinput = document.getElementById("user-input");
 const maincotainer = document.getElementById("main-container");
 const mainbodyright = document.getElementById("main-body-right");
 const messagecontainer = document.getElementById("message-container");
-const exitbtn = document.getElementById("exit-btn")
+const exitbtn = document.getElementById("exit-btn");
+const messagesendbtn = document.getElementById("message-send-btn");
 
 // const msgidiv = document.getElementsByClassName("message-inside-div")
 const db = getFirestore();
 const messagedb = collection(db, "Messages");
 const userdb = collection(db, "userDetails");
 let selecteduser;
+
+
 
 function signin() {
   const popup = new GoogleAuthProvider(app);
@@ -91,21 +94,19 @@ function loadMessage(data) {
     const messageprofile = document.createElement("img");
     messageprofile.classList.add("message-profile");
     messageprofile.src = nndata.photoprofile;
-   
-    if(nndata.senderuid==auth.currentUser.uid){
-      messageinsideinsidediv.style.justifyContent = "right"
-       messageinsideinsidediv.append(messagediv, messageprofile);
-    }
-    else{
-      messageinsideinsidediv.style.justifyContent = "left"
-       messageinsideinsidediv.append(messageprofile,messagediv);
-       
+
+    if (nndata.senderuid == auth.currentUser.uid) {
+      messageinsideinsidediv.style.justifyContent = "right";
+      messageinsideinsidediv.append(messagediv, messageprofile);
+    } else {
+      messageinsideinsidediv.style.justifyContent = "left";
+      messageinsideinsidediv.append(messageprofile, messagediv);
     }
     messageinsidediv.append(messageinsideinsidediv);
     msglist.push(messageinsidediv);
   });
-  const scrolldiv = document.createElement("div")
-  msglist.push(scrolldiv)
+  const scrolldiv = document.createElement("div");
+  msglist.push(scrolldiv);
   messagecontainer.replaceChildren(...msglist);
   scrolldiv.scrollIntoView();
 }
@@ -146,33 +147,28 @@ onAuthStateChanged(auth, (user) => {
           sidelayout.appendChild(link);
           container.push(sidelayout);
 
-          sidelayout.addEventListener("click",() => {
+          sidelayout.addEventListener("click", () => {
             selecteduser = sidelayout.value;
-            getDoc(doc(db, "userDetails", sidelayout.value)
-            ).then((doc) => {
+            getDoc(doc(db, "userDetails", sidelayout.value)).then((doc) => {
               const details = doc.data();
               maincotainer.classList.remove("main-container-adjust");
               mainbodyright.classList.remove("blank");
               // mainbodyright.classList.add("main-body-right");
-              mainbodyleft.classList.add("new-blank")
+              mainbodyleft.classList.add("new-blank");
               currentclickeduser.src = details.profilepic;
               currentclickedtext.textContent = details.username;
-             
-              
+
               document.querySelectorAll(".side-profiles").forEach((profile) => {
                 profile.classList.remove("active");
               });
               sidelayout.classList.add("active");
             });
             exitbtn.addEventListener("click", () => {
-              
-              mainbodyright.classList.add("blank")
+              mainbodyright.classList.add("blank");
               mainbodyleft.classList.remove("new-blank");
               maincotainer.classList.add("main-container-adjust");
-              
-              
             });
-            getDocs(query(messagedb,orderBy("time"))).then((datas) => {
+            getDocs(query(messagedb, orderBy("time"))).then((datas) => {
               loadMessage(datas.docs.map((msg) => msg.data()));
             });
           });
@@ -193,8 +189,20 @@ onAuthStateChanged(auth, (user) => {
             photoprofile: user.photoURL,
           });
         }
-        userinput.value=""
+        userinput.value = "";
       }
+    });
+    messagesendbtn.addEventListener("click", () => {
+      if (userinput.value.trim()) {
+        addDoc(messagedb, {
+          reciveruid: selecteduser,
+          message: userinput.value,
+          time: serverTimestamp(),
+          senderuid: user.uid,
+          photoprofile: user.photoURL,
+        });
+      }
+      userinput.value = "";
     });
     logoutbtn.addEventListener("click", () => {
       signout();
@@ -203,7 +211,6 @@ onAuthStateChanged(auth, (user) => {
       userinterface.classList.remove("user-interface");
       userinterface.classList.add("blank");
     });
-    
   } else {
     loginbtn.addEventListener("click", () => {
       signin();
