@@ -105,9 +105,9 @@ background-image: url(/bgc-new-removebg.png);
 .upper-navbar-left{
     width: 100%;
     display: flex;
-    justify-content: center;
-    gap:330px;
-    padding:10px 0px;
+    justify-content: space-between;
+    /* gap:330px; */
+    padding:10px 1rem;
     align-items: center;
     border-bottom: 1px solid #696969;
 }
@@ -121,6 +121,7 @@ background-image: url(/bgc-new-removebg.png);
    border: none;
    outline: none;
    padding-bottom:5px ;
+   /* width:20px; */
    color: #fff;
 }
 
@@ -174,12 +175,19 @@ background-image: url(/bgc-new-removebg.png);
     top:0;
     right: 0;
     display: flex;
-    gap:20px;
+    justify-content: space-between;
     align-items: center;
     width:70%;
     height: 67px;
     border-bottom: 1px solid #696969;
+    padding: 0 1rem;
     /* background-color: aqua; */
+}
+.user-det{
+    display: flex;
+    /* justify-content: space-between; */
+    gap:1rem;
+    align-items: center;
 }
 .exit-btn{
     display: none;
@@ -188,6 +196,8 @@ background-image: url(/bgc-new-removebg.png);
     position: fixed;
     bottom: 0;
     display: flex;
+    justify-content: space-between;
+    
     border-top:1px solid #696969 ;
     padding: 15px 10px;
     width: 70%;
@@ -212,6 +222,7 @@ background-image: url(/bgc-new-removebg.png);
     border-radius: 40px;
     border: none;
     background-color: #00acee;
+    flex-shrink: 0;
     
 }
 svg{
@@ -234,7 +245,7 @@ svg{
     height: 50px;
     width: 50px;
     border-radius: 40px;
-    margin-left: 40px;
+    /* margin-left: 40px; */
     
 }
 .current-clicked-text{
@@ -271,7 +282,7 @@ svg{
  width:45px;
  border-radius: 30px;
 }
-@media (min-width:320px) and (max-width: 480px){
+@media screen and (max-width: 480px){
     .login-div{
         width: 330px;
     }
@@ -284,20 +295,12 @@ svg{
    .main-body-right{
     width: 100%;
    }
-   .upper-navbar-right{
-    left:0;
-    gap: 20px;
-    width: 100%;
-    justify-content: left;
-   }
-   .upper-navbar-left{
-    gap:315px;
-   }
+ 
    .exit-btn{
     display: block;
   
-    position: absolute;
-    left:350px;
+    /* position: absolute;
+    left:350px; */
     background-color: #28282b;
     border: none;
     color: #fff;
@@ -315,14 +318,14 @@ svg{
     padding: 10px 10px;
    }
    .user-input{
-    width:800px !important;
+    width:100%;
    }
-   .message-send-btn{
-    width:120px;
-   }
+   
    .message-input-area{
     width: 100%;
     gap: 20px;
    }
-
+   .upper-navbar-right{
+    width: 100%;
+   }
 }
