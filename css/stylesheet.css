@@ -181,6 +181,9 @@ background-image: url(/bgc-new-removebg.png);
     border-bottom: 1px solid #696969;
     /* background-color: aqua; */
 }
+.exit-btn{
+    display: none;
+}
 .message-input-area{
     position: fixed;
     bottom: 0;
@@ -267,4 +270,59 @@ svg{
  height:45px;
  width:45px;
  border-radius: 30px;
+}
+@media (min-width:320px) and (max-width: 480px){
+    .login-div{
+        width: 330px;
+    }
+   .main-body-left{
+    width: 100%;
+   }
+   .new-blank{
+    display: none;
+   }
+   .main-body-right{
+    width: 100%;
+   }
+   .upper-navbar-right{
+    left:0;
+    gap: 20px;
+    width: 100%;
+    justify-content: left;
+   }
+   .upper-navbar-left{
+    gap:315px;
+   }
+   .exit-btn{
+    display: block;
+  
+    position: absolute;
+    left:350px;
+    background-color: #28282b;
+    border: none;
+    color: #fff;
+   }
+   .current-clicked-user{
+     margin-left: 10px;
+   }
+   
+   
+   .message-container{
+    width: 100%;
+    height: 83%;
+   }
+   .message-inside-inside-div{
+    padding: 10px 10px;
+   }
+   .user-input{
+    width:800px !important;
+   }
+   .message-send-btn{
+    width:120px;
+   }
+   .message-input-area{
+    width: 100%;
+    gap: 20px;
+   }
+
 }

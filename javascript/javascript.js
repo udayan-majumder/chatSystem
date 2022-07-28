@@ -46,6 +46,8 @@ const userinput = document.getElementById("user-input");
 const maincotainer = document.getElementById("main-container");
 const mainbodyright = document.getElementById("main-body-right");
 const messagecontainer = document.getElementById("message-container");
+const exitbtn = document.getElementById("exit-btn")
+
 // const msgidiv = document.getElementsByClassName("message-inside-div")
 const db = getFirestore();
 const messagedb = collection(db, "Messages");
@@ -151,14 +153,24 @@ onAuthStateChanged(auth, (user) => {
               const details = doc.data();
               maincotainer.classList.remove("main-container-adjust");
               mainbodyright.classList.remove("blank");
-              mainbodyright.classList.add("main-body-right");
+              // mainbodyright.classList.add("main-body-right");
+              mainbodyleft.classList.add("new-blank")
               currentclickeduser.src = details.profilepic;
               currentclickedtext.textContent = details.username;
+             
               
               document.querySelectorAll(".side-profiles").forEach((profile) => {
                 profile.classList.remove("active");
               });
               sidelayout.classList.add("active");
+            });
+            exitbtn.addEventListener("click", () => {
+              
+              mainbodyright.classList.add("blank")
+              mainbodyleft.classList.remove("new-blank");
+              maincotainer.classList.add("main-container-adjust");
+              
+              
             });
             getDocs(query(messagedb,orderBy("time"))).then((datas) => {
               loadMessage(datas.docs.map((msg) => msg.data()));
@@ -191,6 +203,7 @@ onAuthStateChanged(auth, (user) => {
       userinterface.classList.remove("user-interface");
       userinterface.classList.add("blank");
     });
+    
   } else {
     loginbtn.addEventListener("click", () => {
       signin();
